@@ -85,7 +85,6 @@ init(){
 }
 
 run(){
-  clear
   green " 1. init 初始化"
   green " 2. install_docker"
   green " 3. install_x_ui"
@@ -115,7 +114,6 @@ run(){
     ;;
 
     * )
-        clear
         red "请输入命令: bash ~/init_scripts/init.sh <script_name>"
         exit 1
     ;;
