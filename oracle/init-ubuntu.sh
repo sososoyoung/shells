@@ -18,10 +18,10 @@ cur_dir=$(pwd)
 scripts_dir='~/init_scripts'
 
 # check root
-[[ $EUID -ne 0 ]] && red "错误：${plain} 必须使用root用户运行此脚本！\n" && exit 1
+# [[ $EUID -ne 0 ]] && red "错误：${plain} 必须使用root用户运行此脚本！\n" && exit 1
 
 # check os
-[[ x"${release}" != x"ubuntu" ]] && red "请使用 Ubuntu 16 或更高版本的系统！${plain}\n" && exit 1
+# [[ x"${release}" != x"ubuntu" ]] && red "请使用 Ubuntu 16 或更高版本的系统！${plain}\n" && exit 1
 
 # check arch
 arch=$(arch)
