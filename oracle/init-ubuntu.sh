@@ -17,12 +17,6 @@ blue(){
 cur_dir=$(pwd)
 scripts_dir='~/init_scripts'
 
-# check root
-# [[ $EUID -ne 0 ]] && red "错误：${plain} 必须使用root用户运行此脚本！\n" && exit 1
-
-# check os
-# [[ x"${release}" != x"ubuntu" ]] && red "请使用 Ubuntu 16 或更高版本的系统！${plain}\n" && exit 1
-
 # check arch
 arch=$(arch)
 
@@ -37,8 +31,17 @@ fi
 
 green "架构: ${arch}"
 
-green "mkdir ${scripts_dir}"
-mkdir $scripts_dir
+# demo:　down_sh url shell.sh
+down_sh(){
+  curl -fsSL $1 -o $2
+}
+
+run_sh(){
+  chmod +x $1
+  chmod 777 $1
+  yellow "下载完成, 之后可执行 sudo bash $1 再次运行"
+  bash $1
+}
 
 fix_iptables() {
     iptables -P INPUT ACCEPT
@@ -49,18 +52,21 @@ fix_iptables() {
 }
 
 install_docker() {
-  curl -fsSL https://get.docker.com -o $scripts_dir/get-docker.sh
-  bash $scripts_dir/get-docker.sh
+  s="$scripts_dir/get-docker.sh"
+  down_sh https://get.docker.com $s
+  run_sh $s
 }
 
 install_base() {
   green "apt update..."
   apt update
-  apt install wget curl git -y
+  apt install wget curl git jq net-tools -y
 }
 
 install_x_ui() {
-  bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh)
+  s="$scripts_dir/x-ui.sh"
+  down_sh https://raw.githubusercontent.com/vaxilu/x-ui/master/install.sh $s
+  run_sh $s
 }
 
 #获取本机IP
@@ -72,11 +78,9 @@ function get_ip(){
 
 #IPV.SH ipv4/6优先级调整
 function ipvsh(){
-  wget -O "$scripts_dir/ipv4.sh" "https://raw.githubusercontent.com/Netflixxp/jcnf-box/master/sh/ipv4.sh" --no-check-certificate -T 30 -t 5 -d
-  chmod +x "$scripts_dir/ipv4.sh"
-  chmod 777 "$scripts_dir/ipv4.sh"
-  yellow "下载完成, 之后可执行 sudo bash $scripts_dir/ipv4.sh 再次运行"
-  bash "$scripts_dir/ipv4.sh"
+  s="$scripts_dir/ipv4.sh"
+  down_sh https://raw.githubusercontent.com/Netflixxp/jcnf-box/master/sh/ipv4.sh $s
+  run_sh $s
 }
 
 init(){
@@ -114,11 +118,11 @@ run(){
     ;;
 
     * )
-        red "请输入命令: bash ~/init_scripts/init.sh <script_name>"
+        red "请输入命令: bash ~/init.sh <script_name>"
         exit 1
     ;;
   esac
 }
 
 install_base
-run $1
+run $1 $2 $3 $4
