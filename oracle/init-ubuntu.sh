@@ -84,6 +84,7 @@ function ipvsh(){
 }
 
 init(){
+  install_base
   fix_iptables
   install_docker
 }
@@ -124,5 +125,4 @@ run(){
   esac
 }
 
-install_base
 run $1 $2 $3 $4
