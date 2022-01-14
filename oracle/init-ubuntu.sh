@@ -15,7 +15,7 @@ blue(){
 }
 
 cur_dir=$(pwd)
-scripts_dir='~/init_scripts'
+scripts_dir='/home/ubuntu/init_scripts'
 
 # check arch
 arch=$(arch)
